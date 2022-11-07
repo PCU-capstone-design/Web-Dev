@@ -80,6 +80,32 @@ const Month = [
     },
 ]; //월 (생년월일)
 
+const user = [
+    { id: "kbs", pw: "1234", pwcheck: "1234", name: "권보성", phonenum: "01012341234", sex: "male", year: "1999", mm: "1", dd: "25"},
+    { id: "logsh2", pw: "1234", pwcheck: "1234" },
+    { id: "logsh3", pw: "1234", pwcheck: "1234" },
+    { id: "logsh4", pw: "1234", pwcheck: "1234" },
+];
+
+const checkSignup = (id, pw, pwcheck, sex) => {
+    var success = false;
+
+    const value = user.forEach((e) => {
+        if (e["id"] === id) {
+            if (e["pw"] === pw && e["pw"] === pwcheck ) {
+                if(e["sex"] === sex){ //메뉴아이템 데이터값 확인 위해
+                    success = true;
+                }
+            }
+
+        }
+    });
+
+
+
+    return { success: success};
+};
+
 
 function Signup() {
 
@@ -111,11 +137,50 @@ function Signup() {
         setPwd(e.target.value); //이벤트를 받는 타겟의 value값으로 변경
     }
 
+    const [pwdcheck, setPwdcheck] = useState("");
+
+    const onPwdcheckChange = (e) => {
+        //e : 이벤트 객체
+        setPwdcheck(e.target.value); //이벤트를 받는 타겟의 value값으로 변경
+    }
+
+    const [name, setName] = useState("");
+    const onNameChange = (e) => {
+        //e : 이벤트 객체
+        setName(e.target.value); //이벤트를 받는 타겟의 value값으로 변경
+    }
+
+    const [phoneNum, setphoneNum] = useState("");
+
+    const onphoneNumChange = (e) => {
+        //e : 이벤트 객체
+        setphoneNum(e.target.value); //이벤트를 받는 타겟의 value값으로 변경
+    }
+
+    const [year, setYear] = useState("");
+
+    const onYearChange = (e) => {
+        //e : 이벤트 객체
+        setYear(e.target.value); //이벤트를 받는 타겟의 value값으로 변경
+    }
+
+    const [day, setDay] = useState("");
+
+    const onDayChange = (e) => {
+        //e : 이벤트 객체
+        setDay(e.target.value); //이벤트를 받는 타겟의 value값으로 변경
+    }
+
+    const [mm, setMm] = useState("");
+    const [sex, setSex] = useState("");
+
     const navigate = useNavigate();
 
     const MoveLogin = () => {
         navigate(`/login`); // 로그인 페이지로 이동
     };
+
+
 
     return (
         <Box sx={{ mt: 5 }}>
@@ -137,6 +202,8 @@ function Signup() {
                            name="email"
                            onChange={onEmailChange}
                            value={email}
+                           error={email === ""}
+                           helperText={email === "" ? '이메일 아이디를 입력해주세요 ' : ' '}
 
                 />
                 <TextField sx={{
@@ -149,10 +216,12 @@ function Signup() {
                 }}
                            label="비밀번호"
                            type="password"
-                           helperText="8~16자 영문, 숫자, 특수문자를 사용하세요."
+
                            name="password"
                            onChange={onPwdChange}
                            value={pwd}
+                           error={pwd === ""}
+                           helperText={pwd === "" ? '비밀번호를 입력해주세요 ' : ' '}
                 />
 
                 <TextField sx={{
@@ -166,6 +235,10 @@ function Signup() {
                            label="비밀번호 확인"
                            type="password"
                            name="pwdCheck"
+                           onChange={onPwdcheckChange}
+                           value={pwdcheck}
+                           error={pwd !== pwdcheck}
+                           helperText={pwd !== pwdcheck ? '비밀번호가 다릅니다. ' : ' '}
                 />
 
 
@@ -180,6 +253,8 @@ function Signup() {
                            label="이름"
                            type="name"
                            name="name"
+                           onChange={onNameChange}
+                           value={name}
                 />
                 <TextField sx={{
                     width: 0.4, mt: 2,
@@ -193,6 +268,8 @@ function Signup() {
                            type="number"
 
                            name="phone"
+                           onChange={onphoneNumChange}
+                           value={phoneNum}
                 />
 
                 <TextField sx={{
@@ -212,7 +289,11 @@ function Signup() {
 
                 >
                     {currencies.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
+                        <MenuItem key={option.value} value={option.value} onClick={(e) => {
+
+                            setSex(option.value);
+
+                        }}>
                             {option.label}
                         </MenuItem>
                     ))}
@@ -227,7 +308,8 @@ function Signup() {
                     생년월일
                 </Typography>
 
-                <TextField sx={{
+                <TextField
+                           sx={{
                     width: 0.4, mt: 1,
                     '.MuiInputBase-root': {
                         borderRadius: 5,
@@ -238,6 +320,9 @@ function Signup() {
                            label="년도(4자)"
                            type="number"
                            name="year"
+                           inputProps={{ maxLength: 4 }}
+                           onChange={onYearChange}
+                           value={year}
                 />
                 <TextField sx={{
                     width: 0.3, mt: 1,
@@ -256,8 +341,15 @@ function Signup() {
 
                 >
                     {Month.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
+                        <MenuItem key={option.value} value={option.value} onClick={(event) => {event.preventDefault();
+
+                                setMm(option.value)
+
+                        }}
+
+                        >
                             {option.label}
+
                         </MenuItem>
                     ))}
                 </TextField>
@@ -274,6 +366,8 @@ function Signup() {
                            type="number"
 
                            name="day"
+                           onChange={onDayChange}
+                           value={day}
                 />
 
 
@@ -283,7 +377,23 @@ function Signup() {
                 </Box>
 
                 <Box>
-                    <Button variant="outlined" sx={{ width: 1 / 2, mt: 2, mb: 5}} onClick={(event) => {event.preventDefault(); console.log("id : " + email +" pwd : " + pwd); MoveLogin({});}}> 가입하기 </Button>
+                    <Button variant="outlined" sx={{ width: 1 / 2, mt: 2,   mb: 5}} onClick={(event) => {event.preventDefault();
+                        {
+                            if (checkSignup(email, pwd, pwdcheck, sex)["success"]) {
+                             alert('회원가입 성공')
+                                MoveLogin()
+                            }
+                            else if(pwd !== pwdcheck) {
+                                alert('비밀번호가 일치하지 않습니다')
+                                setEmail('');
+                                setPwd('');
+                                setPwdcheck('');}
+                            else {
+                            alert('회원가입 실패')
+                            setEmail('');
+                            setPwd('');
+                            setPwdcheck('');
+                        }}}}> 가입하기 </Button>
                 </Box>
 
             </Container>
