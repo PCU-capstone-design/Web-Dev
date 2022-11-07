@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CloudCircleIcon from '@mui/icons-material/CloudCircle';
+import { useNavigate } from 'react-router-dom';
 
 const pages = ['분석', '랭킹', '채팅'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -19,6 +20,8 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function Appbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const navi = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,7 +48,6 @@ function Appbar() {
               variant="h6"
               noWrap
               component="a"
-              href="/"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -54,6 +56,7 @@ function Appbar() {
                 color: 'secondary.main',
                 textDecoration: 'none',
               }}
+              onClick={(e) => navi('/')}
             >
               OTL
             </Typography>
@@ -99,7 +102,6 @@ function Appbar() {
               variant="h5"
               noWrap
               component="a"
-              href=""
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -109,6 +111,7 @@ function Appbar() {
                 color: 'secondary.main',
                 textDecoration: 'none',
               }}
+              onClick={(e) => navi('/')}
             >
               OTL
             </Typography>
