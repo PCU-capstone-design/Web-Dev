@@ -82,19 +82,23 @@ const Month = [
 
 const user = [
     { id: "kbs", pw: "1234", pwcheck: "1234", name: "권보성", phonenum: "01012341234", sex: "male", year: "1999", mm: "1", dd: "25"},
-    { id: "logsh2", pw: "1234", pwcheck: "1234" },
-    { id: "logsh3", pw: "1234", pwcheck: "1234" },
-    { id: "logsh4", pw: "1234", pwcheck: "1234" },
+    { id: "sbk", pw: "1234", pwcheck: "1234", name: "권보성", phonenum: "01012341234", sex: "female", year: "1999", mm: "2", dd: "25"},
+    { id: "abc", pw: "1234", pwcheck: "1234", name: "권보성", phonenum: "01012341234", sex: "male", year: "1999", mm: "3", dd: "25"},
+    { id: "cba", pw: "1234", pwcheck: "1234", name: "권보성", phonenum: "01012341234", sex: "none", year: "1999", mm: "4", dd: "25"},
+
 ];
 
-const checkSignup = (id, pw, pwcheck, sex) => {
+const checkSignup = (id, pw, pwcheck, sex, mm) => {
     var success = false;
 
     const value = user.forEach((e) => {
         if (e["id"] === id) {
             if (e["pw"] === pw && e["pw"] === pwcheck ) {
                 if(e["sex"] === sex){ //메뉴아이템 데이터값 확인 위해
-                    success = true;
+                    if (e["mm"] === mm){
+                        success = true;
+                    }
+
                 }
             }
 
@@ -180,6 +184,11 @@ function Signup() {
         navigate(`/login`); // 로그인 페이지로 이동
     };
 
+
+    const [checked, setChecked] = React.useState(false);
+
+    const Checkedchange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked); }
 
 
     return (
@@ -373,21 +382,32 @@ function Signup() {
 
 
                 <Box sx={{ mt: 1, display: 'flex', justifyContent: 'flex-end'}}>
-                    <FormControlLabel control={<Checkbox defaultChecked sx={{ color: 'primary.main' }} />} label="회원가입 약관에 동의합니다." sx={{ display: 'inline', alignSelf: 'left', color: 'primary.main'}} />
+                    <FormControlLabel control={<Checkbox onChange={Checkedchange} sx={{ color: 'primary.main' }} />} label="회원가입 약관에 동의합니다." sx={{ display: 'inline', alignSelf: 'left', color: 'primary.main'}} />
                 </Box>
 
                 <Box>
                     <Button variant="outlined" sx={{ width: 1 / 2, mt: 2,   mb: 5}} onClick={(event) => {event.preventDefault();
                         {
-                            if (checkSignup(email, pwd, pwdcheck, sex)["success"]) {
-                             alert('회원가입 성공')
-                                MoveLogin()
-                            }
+                            console.log(checked)
+
+                                if(checked !== true)
+                                {
+                                    alert('회원가입 약관에 동의해주세요')
+                                    setPwd('');
+                                    setPwdcheck('');
+
+                                }
+
+                                else if (checkSignup(email, pwd, pwdcheck, sex, mm)["success"]) {
+                                    alert('회원가입 성공')
+                                    MoveLogin()
+                                }
+
                             else if(pwd !== pwdcheck) {
                                 alert('비밀번호가 일치하지 않습니다')
-                                setEmail('');
                                 setPwd('');
                                 setPwdcheck('');}
+
                             else {
                             alert('회원가입 실패')
                             setEmail('');
