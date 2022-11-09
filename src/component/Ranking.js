@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 
 // 미완성
 const columns = [
-    { field: 'rank', headerName: 'rank', width: 200 },
+    { field: 'rank', headerName: '순위', width: 200 },
     {
         field: 'firstName',
         headerName: '단어',
